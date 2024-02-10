@@ -1,5 +1,7 @@
 package ht.ShoppingCart;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -65,12 +67,12 @@ public class ShoppingCart extends Application{
 		testlbl = new Label("test");
 		testlbl.setLayoutX(0);
 		testlbl.setLayoutY(0);
-		//ui.getChildren().add(testlbl);
+		ui.getChildren().add(testlbl);
 		
 		testbtn = new Button();
 		testbtn.setLayoutX(40);
 		testbtn.setLayoutY(0);
-		//ui.getChildren().add(testbtn);
+		ui.getChildren().add(testbtn);
 		testbtn.setOnAction(e -> testMethod());
 		
 		ObservableList<String> options = FXCollections.observableArrayList(
@@ -192,12 +194,20 @@ public class ShoppingCart extends Application{
 			text=text+"____________\n Name: "+c.name+"\n price: "+c.price+"\n";
 			receipt.setText(text);
 		}	
-		String totalText = totalPrice + ""; 
+		
+		printTotal();
+		
+	}
+	private void printTotal() {
+		
+		var df = new DecimalFormat("#.##");
+		df.setRoundingMode(RoundingMode.CEILING);
+		String totalText = df.format(totalPrice);
+		//String totalText = totalPrice + ""; 
 		totaltxt.setText("Total: £"+totalText);
 		int listlen = productsList.size();
 		testlbl.setText(listlen+"");
 	}
-	
 	
 	private boolean valid(String currentProduct, int quantityNum) {
 		 if (currentProduct.equals("Select a product")) {
