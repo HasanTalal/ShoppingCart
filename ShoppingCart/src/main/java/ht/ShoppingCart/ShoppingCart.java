@@ -37,6 +37,8 @@ public class ShoppingCart extends Application{
 	
 	Products products;
 	double totalPrice = 0;
+	final double tax = 12.5;
+
 	public static void main(String[] args) {
 		launch(args);
 
@@ -77,7 +79,7 @@ public class ShoppingCart extends Application{
 		
 		ObservableList<String> options = FXCollections.observableArrayList(
 				"Dove",
-				"other1",
+				"Axe Deo",
 				"other2"
 				);		
 		
@@ -160,13 +162,14 @@ public class ShoppingCart extends Application{
 	private void purchase() {	
 		String currentProduct = productCombo.getValue();
 		int quantityNum = Integer.parseInt(quantity.getText());
-		
+		totalPrice = 0;
 		if (valid(currentProduct, quantityNum)) {
 			for (int i = 0; i < quantityNum;i++){					
 				products = new Products(currentProduct);
 				addProductToList(products.getName(), products.getPrice()); 					
-				totalPrice = products.getPrice() + totalPrice;
+				//totalPrice = products.getPrice() + totalPrice;		
 			}
+			calculateTotal();			
 			printReceipt();
 		}				
 	}
@@ -200,14 +203,32 @@ public class ShoppingCart extends Application{
 	}
 	private void printTotal() {
 		
+		//
+		
 		var df = new DecimalFormat("#.##");
 		df.setRoundingMode(RoundingMode.CEILING);
 		String totalText = df.format(totalPrice);
+		
+		
+		
 		//String totalText = totalPrice + ""; 
 		totaltxt.setText("Total: £"+totalText);
 		int listlen = productsList.size();
 		testlbl.setText(listlen+"");
 	}
+	
+	private void calculateTotal() {
+//		for (int i = 0; i < quantityNum;i++){									
+//			totalPrice = products.getPrice() + totalPrice;
+//		}
+		
+		for(Products c: productsList) {	
+			totalPrice = c.getPrice() + totalPrice;
+		}	
+		totalPrice =  totalPrice + (tax * (totalPrice/100));
+		
+	}
+	
 	
 	private boolean valid(String currentProduct, int quantityNum) {
 		 if (currentProduct.equals("Select a product")) {

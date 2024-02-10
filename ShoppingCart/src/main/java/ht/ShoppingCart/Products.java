@@ -12,9 +12,9 @@ public class Products {
 			this.name = "Dove";
 			this.price = 39.99;
 		}
-		if (name.equals("other1")) {
-			this.name = "other1";
-			this.price = 10.00;
+		if (name.equals("Axe Deo")) {
+			this.name = "Axe Deo";
+			this.price = 99.99;
 		}
 	}
 	
