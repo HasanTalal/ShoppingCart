@@ -28,7 +28,7 @@ public class ShoppingCart extends Application{
 	Pane sidebar, ui =  new Pane();
 	
 	TextArea receipt;
-	TextField totaltxt;
+	TextField totaltxt, taxtxt;
 	
 	Button addq, minusq, purchaseBtn, testbtn;
 	TextField quantity; 
@@ -129,7 +129,12 @@ public class ShoppingCart extends Application{
 		totaltxt.setLayoutY(400);
 		totaltxt.setText("Total:");
 		
-		ui.getChildren().addAll(receipt, totaltxt);
+		taxtxt = new TextField();
+		taxtxt.setLayoutX(10);
+		taxtxt.setLayoutY(440);
+		taxtxt.setText("Tax (12.5%): " );
+		
+		ui.getChildren().addAll(receipt, totaltxt, taxtxt);
 		
 		productCombo.getSelectionModel().selectedItemProperty().addListener(comboListner);
 		
@@ -215,16 +220,17 @@ public class ShoppingCart extends Application{
 		totaltxt.setText("Total: £"+totalText);
 		int listlen = productsList.size();
 		testlbl.setText(listlen+"");
+		
+		double toDisplayTax = tax * (totalPrice/100);
+		taxtxt.setText("Tax (12.5%): " + df.format(toDisplayTax));
 	}
 	
 	private void calculateTotal() {
-//		for (int i = 0; i < quantityNum;i++){									
-//			totalPrice = products.getPrice() + totalPrice;
-//		}
 		
 		for(Products c: productsList) {	
 			totalPrice = c.getPrice() + totalPrice;
 		}	
+		
 		totalPrice =  totalPrice + (tax * (totalPrice/100));
 		
 	}
