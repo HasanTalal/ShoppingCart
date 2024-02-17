@@ -30,10 +30,10 @@ public class ShoppingCart extends Application{
 	TextArea receipt;
 	TextField totaltxt, taxtxt;
 	
-	Button addq, minusq, purchaseBtn, testbtn;
+	Button addq, minusq, purchaseBtn, testbtn, discountBtn;
 	TextField quantity; 
 	ComboBox<String> productCombo;
-	Label pcLabel, testlbl;
+	Label pcLabel, discountlbl, testlbl;
 	
 	Products products;
 	double totalPrice = 0;
@@ -63,7 +63,7 @@ public class ShoppingCart extends Application{
 		pcLabel = new Label("Select your product");
 		pcLabel.setLayoutX(20);
 		pcLabel.setLayoutY(20);
-		//ui.getChildren().add(pcLabel);
+		ui.getChildren().add(pcLabel);
 		
 		
 		testlbl = new Label("test");
@@ -135,6 +135,16 @@ public class ShoppingCart extends Application{
 		taxtxt.setText("Tax (12.5%): " );
 		
 		ui.getChildren().addAll(receipt, totaltxt, taxtxt);
+		
+		discountlbl = new Label();
+		discountlbl.setLayoutX(10);
+		discountlbl.setLayoutY(10);
+		discountlbl.setText("Click here to activate your discount");
+		
+		discountBtn = new Button();
+		discountBtn.setLayoutX(10);
+		discountBtn.setLayoutY(10);
+		discountBtn.setText("Apply B2GO");
 		
 		productCombo.getSelectionModel().selectedItemProperty().addListener(comboListner);
 		
@@ -221,8 +231,7 @@ public class ShoppingCart extends Application{
 		int listlen = productsList.size();
 		testlbl.setText(listlen+"");
 		
-		double toDisplayTax = tax * (totalPrice/100);
-		taxtxt.setText("Tax (12.5%): " + df.format(toDisplayTax));
+		
 	}
 	
 	private void calculateTotal() {
@@ -230,6 +239,12 @@ public class ShoppingCart extends Application{
 		for(Products c: productsList) {	
 			totalPrice = c.getPrice() + totalPrice;
 		}	
+		
+		
+		var df2 = new DecimalFormat("#.##");
+		df2.setRoundingMode(RoundingMode.CEILING);
+		double toDisplayTax = tax * (totalPrice/100);
+		taxtxt.setText("Tax (12.5%): £" + df2.format(toDisplayTax));
 		
 		totalPrice =  totalPrice + (tax * (totalPrice/100));
 		
