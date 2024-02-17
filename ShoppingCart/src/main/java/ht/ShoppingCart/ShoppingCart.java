@@ -28,7 +28,7 @@ public class ShoppingCart extends Application{
 	Pane sidebar, ui =  new Pane();
 	
 	TextArea receipt;
-	TextField totaltxt, taxtxt;
+	TextField totaltxt, taxtxt, discounttxt;
 	
 	Button addq, minusq, purchaseBtn, testbtn, discountBtn;
 	TextField quantity; 
@@ -137,14 +137,23 @@ public class ShoppingCart extends Application{
 		ui.getChildren().addAll(receipt, totaltxt, taxtxt);
 		
 		discountlbl = new Label();
-		discountlbl.setLayoutX(10);
-		discountlbl.setLayoutY(10);
-		discountlbl.setText("Click here to activate your discount");
+		discountlbl.setLayoutX(20);
+		discountlbl.setLayoutY(180);
+		discountlbl.setText("Click to activate discount");
 		
 		discountBtn = new Button();
-		discountBtn.setLayoutX(10);
-		discountBtn.setLayoutY(10);
+		discountBtn.setLayoutX(20);
+		discountBtn.setLayoutY(200);
 		discountBtn.setText("Apply B2GO");
+		
+		sidebar.getChildren().addAll(discountlbl, discountBtn);
+		
+		discounttxt = new TextField();
+		discounttxt.setLayoutX(10);
+		discounttxt.setLayoutY(480);
+		discounttxt.setText("You saved: £");
+		
+		ui.getChildren().add(discounttxt);
 		
 		productCombo.getSelectionModel().selectedItemProperty().addListener(comboListner);
 		
@@ -186,6 +195,7 @@ public class ShoppingCart extends Application{
 			}
 			calculateTotal();			
 			printReceipt();
+			checkB2Go();
 		}				
 	}
 	
@@ -228,8 +238,8 @@ public class ShoppingCart extends Application{
 		
 		//String totalText = totalPrice + ""; 
 		totaltxt.setText("Total: £"+totalText);
-		int listlen = productsList.size();
-		testlbl.setText(listlen+"");
+		//int listlen = productsList.size();
+		//testlbl.setText(listlen+"");
 		
 		
 	}
@@ -281,8 +291,19 @@ public class ShoppingCart extends Application{
 		
 		alert.showAndWait();
 	}
+	
+	private void checkB2Go() {
+		int Qnum = Integer.parseInt(quantity.getText());
+		
+		if (Qnum < 3 ) {
+			testlbl.setText("no discord avalible");
+		}
+		else {
+			
+		}
+		
+	}
 }
-
 
 
 
