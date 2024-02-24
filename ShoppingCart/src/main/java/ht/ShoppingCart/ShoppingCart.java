@@ -3,7 +3,7 @@ package ht.ShoppingCart;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -34,10 +34,13 @@ public class ShoppingCart extends Application{
 	TextField quantity; 
 	ComboBox<String> productCombo;
 	Label pcLabel, discountlbl, testlbl;
+	List<Double> purchaseList = new ArrayList<>();
+	
 	
 	Products products;
 	double totalPrice = 0;
 	final double tax = 12.5;
+	double lastAddedPriceForDiscount = 0;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -193,7 +196,8 @@ public class ShoppingCart extends Application{
 				addProductToList(products.getName(), products.getPrice()); 					
 				//totalPrice = products.getPrice() + totalPrice;		
 			}
-			calculateTotal();			
+			//calculateTotal();	
+			calculateTotalWithDiscount();
 			printReceipt();
 			//checkB2GO();
 		}				
@@ -238,27 +242,33 @@ public class ShoppingCart extends Application{
 		
 		//String totalText = totalPrice + ""; 
 		totaltxt.setText("Total: £"+totalText);
-
+		totalPrice = 0;
+		
 		
 	}
 	
 	private void calculateTotal() {	
 		int quantityNum = Integer.parseInt(quantity.getText());	
 		int productListItem = productsList.size();	
-		double lastAddedPrice = 0;
+		
+		
+		
 		for(Products c: productsList) {	
 			totalPrice = c.getPrice() + totalPrice;
-			lastAddedPrice = c.getPrice();
+			if (quantityNum >= 3) {
+				lastAddedPriceForDiscount = c.getPrice();
+			}
+			
 		}	
 		double totalForDiscount = totalPrice;
 		
-		applyDiscount(productListItem, lastAddedPrice, totalForDiscount, quantityNum);
+		applyDiscount(productListItem, lastAddedPriceForDiscount, totalForDiscount, quantityNum);
 		
 	}
 	
 	
 	
-	private void applyDiscount(int productListItem, double lastAddedPrice, double totalForDiscount, int quantityNum) {
+	private void applyDiscount(int productListItem, double lastAddedPriceForDiscount, double totalForDiscount, int quantityNum) {
 		
 		var df2 = new DecimalFormat("#.##");
 		df2.setRoundingMode(RoundingMode.CEILING);
@@ -267,17 +277,42 @@ public class ShoppingCart extends Application{
 		
 		if (productListItem >= 3 ) {
 			
+			
+			//experimental#####
+	        int listItem = productsList.size() - quantityNum - 1;
+	        if (listItem == -1) {
+	            listItem++;
+	        }
+	        
+	        for (int i = 0; i < productsList.size(); i++) {
+     
+	            testlbl.setText("loop is on i:"+i + "other is :" + listItem);	
+	            
+	            if (i >= 2) {
+	            	Products c = productsList.get(i);
+	            	totalPrice = c.getPrice() + totalPrice;
+				}
+	            
+	       
+	            
+	            //lastAddedPrice = c.getPrice();
+	            listItem = i;
+	            
+	        }		
+			//experimental#####
+	        
+	        
 			int freeProducts = productListItem / 3;	
 			int selectedQuantityNum = quantityNum / 3;
 			
-			totalPrice = totalPrice - (freeProducts * (lastAddedPrice + (lastAddedPrice * (tax/100))));
+			totalPrice = totalPrice - (freeProducts * (lastAddedPriceForDiscount + (lastAddedPriceForDiscount * (tax/100))));
 			
-			double totalSaved = freeProducts * lastAddedPrice ;
+			double totalSaved = freeProducts * lastAddedPriceForDiscount ;
 			discounttxt.setText(""+totalSaved);
 			
 			double currentTax = totalForDiscount * (tax/100);
 			System.out.println(currentTax);
-			double TaxAfterDiscount = currentTax - (freeProducts * (lastAddedPrice * (tax/100)));
+			double TaxAfterDiscount = currentTax - (freeProducts * (lastAddedPriceForDiscount * (tax/100)));
 			System.out.println(TaxAfterDiscount);
 			taxtxt.setText("Tax (12.5%): £" + df2.format(TaxAfterDiscount));
 		}	
@@ -285,11 +320,45 @@ public class ShoppingCart extends Application{
 			double toDisplayTax = totalForDiscount * (tax/100);
 			taxtxt.setText("Tax (12.5%): £" + df2.format(toDisplayTax));
 		}
-	}
-	
-	private void totalSaved() {
+		
+		
+		purchaseList.add(totalPrice);
+		System.out.println(purchaseList);
+		
 		
 	}
+	
+	
+
+	private void calculateTotalWithDiscount() {
+		int quantityNum = Integer.parseInt(quantity.getText());	
+		
+		if (productsList.size() >= 3 ) {
+			if (quantityNum >= 3) {
+				totalPrice = 0;
+				int reached3rd = 1;
+				for (int i = 0; i < productsList.size(); i++) {
+				
+					if (reached3rd <= 2) {
+		            	Products c = productsList.get(i);
+		            	totalPrice = c.getPrice() + totalPrice;
+		            	reached3rd++;
+					}
+					else {
+						reached3rd = 1;
+					}    
+				}	
+			}
+		}
+		else {
+			for(Products c: productsList) {	
+				totalPrice = c.getPrice() + totalPrice;
+				
+			}	
+		}
+	}
+	
+	
 	
 	
 	private boolean valid(String currentProduct, int quantityNum) {
