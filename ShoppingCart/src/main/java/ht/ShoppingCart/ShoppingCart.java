@@ -38,7 +38,7 @@ public class ShoppingCart extends Application{
 	Products products;
 	double totalPrice = 0;
 	final double tax = 12.5;
-
+	
 	public static void main(String[] args) {
 		launch(args);
 
@@ -195,7 +195,7 @@ public class ShoppingCart extends Application{
 			}
 			calculateTotal();			
 			printReceipt();
-			checkB2Go();
+			//checkB2GO();
 		}				
 	}
 	
@@ -238,25 +238,56 @@ public class ShoppingCart extends Application{
 		
 		//String totalText = totalPrice + ""; 
 		totaltxt.setText("Total: £"+totalText);
-		//int listlen = productsList.size();
-		//testlbl.setText(listlen+"");
-		
+
 		
 	}
 	
-	private void calculateTotal() {
-		
+	private void calculateTotal() {	
+		int quantityNum = Integer.parseInt(quantity.getText());	
+		int productListItem = productsList.size();	
+		double lastAddedPrice = 0;
 		for(Products c: productsList) {	
 			totalPrice = c.getPrice() + totalPrice;
+			lastAddedPrice = c.getPrice();
 		}	
+		double totalForDiscount = totalPrice;
 		
+		applyDiscount(productListItem, lastAddedPrice, totalForDiscount, quantityNum);
+		
+	}
+	
+	
+	
+	private void applyDiscount(int productListItem, double lastAddedPrice, double totalForDiscount, int quantityNum) {
 		
 		var df2 = new DecimalFormat("#.##");
 		df2.setRoundingMode(RoundingMode.CEILING);
-		double toDisplayTax = tax * (totalPrice/100);
-		taxtxt.setText("Tax (12.5%): £" + df2.format(toDisplayTax));
 		
 		totalPrice =  totalPrice + (tax * (totalPrice/100));
+		
+		if (productListItem >= 3 ) {
+			
+			int freeProducts = productListItem / 3;	
+			int selectedQuantityNum = quantityNum / 3;
+			
+			totalPrice = totalPrice - (freeProducts * (lastAddedPrice + (lastAddedPrice * (tax/100))));
+			
+			double totalSaved = freeProducts * lastAddedPrice ;
+			discounttxt.setText(""+totalSaved);
+			
+			double currentTax = totalForDiscount * (tax/100);
+			System.out.println(currentTax);
+			double TaxAfterDiscount = currentTax - (freeProducts * (lastAddedPrice * (tax/100)));
+			System.out.println(TaxAfterDiscount);
+			taxtxt.setText("Tax (12.5%): £" + df2.format(TaxAfterDiscount));
+		}	
+		else {
+			double toDisplayTax = totalForDiscount * (tax/100);
+			taxtxt.setText("Tax (12.5%): £" + df2.format(toDisplayTax));
+		}
+	}
+	
+	private void totalSaved() {
 		
 	}
 	
@@ -292,14 +323,21 @@ public class ShoppingCart extends Application{
 		alert.showAndWait();
 	}
 	
-	private void checkB2Go() {
+	private void checkB2GO() {
 		int Qnum = Integer.parseInt(quantity.getText());
 		
 		if (Qnum < 3 ) {
-			testlbl.setText("no discord avalible");
+			testlbl.setText("no discount avalible");
 		}
 		else {
+			int Q3s = Qnum / 3;
+			System.out.println(Q3s + " is a number of 3s");
 			
+			if (Qnum % 3 == 0) {
+	            System.out.println(Qnum + " is a multiple of 3.");
+	        } else {
+	            System.out.println(Qnum + " is not a multiple of 3.");
+	        }
 		}
 		
 	}
