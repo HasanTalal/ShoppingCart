@@ -14,7 +14,8 @@ public class Products {
 		}
 		if (name.equals("Axe Deo")) {
 			this.name = "Axe Deo";
-			this.price = 99.99;
+			//this.price = 99.99;
+			this.price = 89.99;
 		}
 	}
 	

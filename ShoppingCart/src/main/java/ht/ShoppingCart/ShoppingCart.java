@@ -34,13 +34,14 @@ public class ShoppingCart extends Application{
 	TextField quantity; 
 	ComboBox<String> productCombo;
 	Label pcLabel, discountlbl, testlbl;
-	List<Double> purchaseList = new ArrayList<>();
+	List<Double> decuctionList = new ArrayList<>();
 	
 	
 	Products products;
 	double totalPrice = 0;
 	final double tax = 12.5;
 	double lastAddedPriceForDiscount = 0;
+	String lastAddedName;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -196,8 +197,8 @@ public class ShoppingCart extends Application{
 				addProductToList(products.getName(), products.getPrice()); 					
 				//totalPrice = products.getPrice() + totalPrice;		
 			}
-			//calculateTotal();	
-			calculateTotalWithDiscount();
+			calculateTotal();	
+			//calculateTotalWithDiscount();
 			printReceipt();
 			//checkB2GO();
 		}				
@@ -258,7 +259,7 @@ public class ShoppingCart extends Application{
 			if (quantityNum >= 3) {
 				lastAddedPriceForDiscount = c.getPrice();
 			}
-			
+			lastAddedName = c.getName();		
 		}	
 		double totalForDiscount = totalPrice;
 		
@@ -275,55 +276,53 @@ public class ShoppingCart extends Application{
 		
 		totalPrice =  totalPrice + (tax * (totalPrice/100));
 		
-		if (productListItem >= 3 ) {
+		
+		if (productListItem >= 3 && lastAddedName.equalsIgnoreCase("dove")) {
 			
-			
-			//experimental#####
-	        int listItem = productsList.size() - quantityNum - 1;
-	        if (listItem == -1) {
-	            listItem++;
-	        }
-	        
-	        for (int i = 0; i < productsList.size(); i++) {
-     
-	            testlbl.setText("loop is on i:"+i + "other is :" + listItem);	
-	            
-	            if (i >= 2) {
-	            	Products c = productsList.get(i);
-	            	totalPrice = c.getPrice() + totalPrice;
-				}
-	            
-	       
-	            
-	            //lastAddedPrice = c.getPrice();
-	            listItem = i;
-	            
-	        }		
-			//experimental#####
-	        
-	        
+	
 			int freeProducts = productListItem / 3;	
 			int selectedQuantityNum = quantityNum / 3;
 			
+			System.out.println("selectedQuantityNum: "+selectedQuantityNum);
+			
+			
 			totalPrice = totalPrice - (freeProducts * (lastAddedPriceForDiscount + (lastAddedPriceForDiscount * (tax/100))));
 			
-			double totalSaved = freeProducts * lastAddedPriceForDiscount ;
+			
+			double totalSaved = freeProducts * lastAddedPriceForDiscount;
+			double totalDedecuted = selectedQuantityNum * (lastAddedPriceForDiscount + (totalSaved*(tax/100)));
+			System.out.println("ttl dud: " + totalDedecuted);
 			discounttxt.setText(""+totalSaved);
 			
+			//Calculating tax
 			double currentTax = totalForDiscount * (tax/100);
 			System.out.println(currentTax);
 			double TaxAfterDiscount = currentTax - (freeProducts * (lastAddedPriceForDiscount * (tax/100)));
 			System.out.println(TaxAfterDiscount);
 			taxtxt.setText("Tax (12.5%): £" + df2.format(TaxAfterDiscount));
+			
+			
+			
+			
+			
+			decuctionList.add(totalDedecuted);
+			System.out.println(decuctionList);
 		}	
 		else {
+			
+			if (!(lastAddedName.equalsIgnoreCase("dove"))) {
+				for (int i = 0; i < decuctionList.size(); i++) {
+					totalPrice = totalPrice - decuctionList.get(i);
+					System.out.println("running loop");
+				}
+			}
+			
 			double toDisplayTax = totalForDiscount * (tax/100);
 			taxtxt.setText("Tax (12.5%): £" + df2.format(toDisplayTax));
 		}
 		
 		
-		purchaseList.add(totalPrice);
-		System.out.println(purchaseList);
+		
 		
 		
 	}
@@ -335,7 +334,7 @@ public class ShoppingCart extends Application{
 		
 		if (productsList.size() >= 3 ) {
 			if (quantityNum >= 3) {
-				totalPrice = 0;
+				//totalPrice = 0;
 				int reached3rd = 1;
 				for (int i = 0; i < productsList.size(); i++) {
 				
