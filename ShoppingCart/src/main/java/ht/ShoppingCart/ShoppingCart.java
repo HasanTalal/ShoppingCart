@@ -235,26 +235,65 @@ public class ShoppingCart extends Application{
 		
 		for(Products c: productsList) {	
 			totalPrice = c.getPrice() + totalPrice;
-			if (quantityNum >= 3) {
-				lastAddedPriceForDiscount = c.getPrice();
-			}
-			lastAddedName = c.getName();		
+			
+			lastAddedPriceForDiscount = c.getPrice();
+			lastAddedName = c.getName();
 		}	
-		
 		
 		double totalForDiscount = totalPrice;
 		
-		totalPrice =  totalPrice + (tax * (totalPrice/100));
-		subTotal = totalPrice;
+		
+		//checkDiscount(productListItem, totalForDiscount, quantityNum);
+		check50Discount(productListItem, totalForDiscount, quantityNum);
+	}
+	
+	private void check50Discount(int productListItem, double totalForDiscount, int quantityNum) {
 		
 		
-		checkDiscount(productListItem, totalForDiscount, quantityNum);
+		subTotal = totalPrice + (tax * (totalPrice/100)); 
+		
+		
+		if (productListItem >=2 && lastAddedName.equalsIgnoreCase("dove")) {
+			
+			
+			int freeProducts = productListItem / 2; //if list size is 6 FP = 3
+			//int selectedQuantityNum = quantityNum / 2;
+		
+			
+			totalPrice = totalPrice - (freeProducts * (lastAddedPriceForDiscount / 2));
+			
+			
+			toDisplayTotalSaved = freeProducts * (lastAddedPriceForDiscount / 2);
+			//double totalDedecuted = freeProducts * (lastAddedPriceForDiscount / 2);
+			decuctionList.add(toDisplayTotalSaved);
+			System.out.println(decuctionList);
+			
+			
+			double currentTax = totalForDiscount * (tax/100);
+			totalTax = currentTax - ((freeProducts * (lastAddedPriceForDiscount * (tax/100)) /2 ));
+			
+			
+		}
+		else {	
+			for (int i = 0; i < decuctionList.size(); i++) {
+				totalPrice = totalPrice - decuctionList.get(i);
+			}	
+			//totalTax = totalForDiscount * (tax/100);	
+			totalTax = totalTax + (quantityNum * (lastAddedPriceForDiscount * (tax/100)));
+			System.out.println("hello");
+			
+		}	
+		
+		
+		//totalPrice =  totalPrice + totalTax;
+		totalPrice = totalPrice + (tax * (totalPrice/100)); 
 		
 	}
 	
-	
-	
 	private void checkDiscount(int productListItem, double totalForDiscount, int quantityNum) {
+		
+		totalPrice =  totalPrice + (tax * (totalPrice/100));
+		subTotal = totalPrice;
 		
 		if (productListItem >= 3 && lastAddedName.equalsIgnoreCase("dove")) {
 			
