@@ -181,7 +181,6 @@ public class ShoppingCart extends Application{
 	
 	private void changeQuantity(String operator) {
 		
-		
 		int Qnum = Integer.parseInt(quantity.getText());
 		if (operator.equals("+")) {
 			Qnum = Qnum + 1;
@@ -201,6 +200,16 @@ public class ShoppingCart extends Application{
 			
 		}
 	};
+	
+	
+	
+	public void addProductToList(String name, double price)
+	{
+		productsList.add(new Products(name, price));
+	}
+	
+	
+	
 	private void purchase() {	
 		String currentProduct = productCombo.getValue();
 		int quantityNum = Integer.parseInt(quantity.getText());
@@ -214,43 +223,6 @@ public class ShoppingCart extends Application{
 			calculateTotal();	
 			printReceipt();	
 		}				
-	}
-	
-	
-	
-	public void addProductToList(String name, double price)
-	{
-		productsList.add(new Products(name, price));
-	}
-	
-	
-	
-	
-	private void printReceipt() {
-		clearReceipt();
-		String text="";
-		for(Products c: productsList) {	
-			text=text+"____________\n Name: "+c.name+"\n price: "+c.price+"\n";
-			receipt.setText(text);
-		}	
-		printTotal();
-		
-	}
-	
-	
-	
-	private void printTotal() {
-		
-		var df = new DecimalFormat("#.##");
-		df.setRoundingMode(RoundingMode.CEILING);
-		
-		
-		totaltxt.setText("Total: £"+ df.format(totalPrice));
-		subtotaltxt.setText("Sub-total: £" + df.format(subTotal));
-		discounttxt.setText("You saved: £"+ df.format(toDisplayTotalSaved));
-		taxtxt.setText("Tax (12.5%): £" + df.format(totalTax));
-		
-		//totalPrice = 0;	
 	}
 	
 	
@@ -311,6 +283,34 @@ public class ShoppingCart extends Application{
 				
 		}			
 	}
+	
+	
+	private void printReceipt() {
+		clearReceipt();
+		String text="";
+		for(Products c: productsList) {	
+			text=text+"____________\n Name: "+c.name+"\n price: "+c.price+"\n";
+			receipt.setText(text);
+		}	
+		printTotal();
+		
+	}
+	
+	
+	
+	private void printTotal() {
+		
+		var df = new DecimalFormat("#.##");
+		df.setRoundingMode(RoundingMode.CEILING);
+		
+		
+		totaltxt.setText("Total: £"+ df.format(totalPrice));
+		subtotaltxt.setText("Sub-total: £" + df.format(subTotal));
+		discounttxt.setText("You saved: £"+ df.format(toDisplayTotalSaved));
+		taxtxt.setText("Tax (12.5%): £" + df.format(totalTax));
+		
+	}
+	
 	
 	
 	
