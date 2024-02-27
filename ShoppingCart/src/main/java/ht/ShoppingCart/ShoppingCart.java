@@ -39,7 +39,7 @@ public class ShoppingCart extends Application{
 	
 	
 	Products products;
-	double totalPrice = 0, subTotal = 0;
+	double totalPrice = 0, subTotal = 0, totalTax = 0, toDisplayTotalSaved = 0;
 	final double tax = 12.5;
 	double lastAddedPriceForDiscount = 0;
 	String lastAddedName;
@@ -197,8 +197,7 @@ public class ShoppingCart extends Application{
 		
 		@Override
 		public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-			//purchase();
-			//testlbl.setText("hello");
+
 			
 		}
 	};
@@ -210,12 +209,10 @@ public class ShoppingCart extends Application{
 			for (int i = 0; i < quantityNum;i++){					
 				products = new Products(currentProduct);
 				addProductToList(products.getName(), products.getPrice()); 					
-				//totalPrice = products.getPrice() + totalPrice;		
+		
 			}
 			calculateTotal();	
-			//calculateTotalWithDiscount();
-			printReceipt();
-			//checkB2GO();
+			printReceipt();	
 		}				
 	}
 	
@@ -225,6 +222,8 @@ public class ShoppingCart extends Application{
 	{
 		productsList.add(new Products(name, price));
 	}
+	
+	
 	
 	
 	private void printReceipt() {
@@ -237,19 +236,30 @@ public class ShoppingCart extends Application{
 		printTotal();
 		
 	}
+	
+	
+	
 	private void printTotal() {
 		
 		var df = new DecimalFormat("#.##");
 		df.setRoundingMode(RoundingMode.CEILING);
-		String totalText = df.format(totalPrice);
-		totaltxt.setText("Total: £"+totalText);
+		
+		
+		totaltxt.setText("Total: £"+ df.format(totalPrice));
 		subtotaltxt.setText("Sub-total: £" + df.format(subTotal));
-		totalPrice = 0;	
+		discounttxt.setText("You saved: £"+ df.format(toDisplayTotalSaved));
+		taxtxt.setText("Tax (12.5%): £" + df.format(totalTax));
+		
+		//totalPrice = 0;	
 	}
 	
+	
+	
+	
 	public void calculateTotal() {	
+		int productListItem = productsList.size();
 		int quantityNum = Integer.parseInt(quantity.getText());	
-		int productListItem = productsList.size();	
+			
 		
 		for(Products c: productsList) {	
 			totalPrice = c.getPrice() + totalPrice;
@@ -259,9 +269,12 @@ public class ShoppingCart extends Application{
 			lastAddedName = c.getName();		
 		}	
 		
+		
 		double totalForDiscount = totalPrice;
+		
 		totalPrice =  totalPrice + (tax * (totalPrice/100));
 		subTotal = totalPrice;
+		
 		
 		checkDiscount(productListItem, totalForDiscount, quantityNum);
 		
@@ -271,55 +284,33 @@ public class ShoppingCart extends Application{
 	
 	private void checkDiscount(int productListItem, double totalForDiscount, int quantityNum) {
 		
-		var df2 = new DecimalFormat("#.##");
-		df2.setRoundingMode(RoundingMode.CEILING);
-		
-		
-		
 		if (productListItem >= 3 && lastAddedName.equalsIgnoreCase("dove")) {
 			
 	
 			int freeProducts = productListItem / 3;	
 			int selectedQuantityNum = quantityNum / 3;
-			
-			System.out.println("selectedQuantityNum: "+selectedQuantityNum);
-			
-			
 			totalPrice = totalPrice - (freeProducts * (lastAddedPriceForDiscount + (lastAddedPriceForDiscount * (tax/100))));
 			
 			
-			double totalSaved = freeProducts * lastAddedPriceForDiscount;
-			double totalDedecuted = selectedQuantityNum * (lastAddedPriceForDiscount + (totalSaved*(tax/100)));
-			System.out.println("ttl dud: " + totalDedecuted);
-			discounttxt.setText("You saved: £"+totalSaved);
-			
-			
-			
+			toDisplayTotalSaved = freeProducts * lastAddedPriceForDiscount;
+			double totalDedecuted = selectedQuantityNum * (lastAddedPriceForDiscount + (toDisplayTotalSaved *(tax/100)));
+			decuctionList.add(totalDedecuted);
 			
 			
 			double currentTax = totalForDiscount * (tax/100);
-			System.out.println(currentTax);
-			double TaxAfterDiscount = currentTax - (freeProducts * (lastAddedPriceForDiscount * (tax/100)));
-			System.out.println(TaxAfterDiscount);
-			taxtxt.setText("Tax (12.5%): £" + df2.format(TaxAfterDiscount));
-			
-			decuctionList.add(totalDedecuted);
-			System.out.println(decuctionList);
+			totalTax = currentTax - (freeProducts * (lastAddedPriceForDiscount * (tax/100)));
+					
 		}	
-		else {
+		else {	
 			
-			if (!(lastAddedName.equalsIgnoreCase("dove"))) {
-				for (int i = 0; i < decuctionList.size(); i++) {
-					totalPrice = totalPrice - decuctionList.get(i);
-					System.out.println("running loop");
-				}
+			for (int i = 0; i < decuctionList.size(); i++) {
+				totalPrice = totalPrice - decuctionList.get(i);
 			}
 			
-			double toDisplayTax = totalForDiscount * (tax/100);
-			taxtxt.setText("Tax (12.5%): £" + df2.format(toDisplayTax));
+			totalTax = totalForDiscount * (tax/100);
+				
 		}			
 	}
-	
 	
 	
 	
@@ -337,6 +328,8 @@ public class ShoppingCart extends Application{
 		 }
 	}
 	
+	
+	
 	private void warningMsg(String warningType) {
 		Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.setHeaderText(null);
@@ -350,9 +343,10 @@ public class ShoppingCart extends Application{
 			alert.setTitle("Product select");
 			alert.setContentText("Please select a product to add to basket!");
 		}
-		
 		alert.showAndWait();
 	}	
+	
+	
 	
 	private void testMethod() {
 		receipt.setText("");
