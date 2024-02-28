@@ -196,7 +196,7 @@ public class ShoppingCart extends Application{
 		}	
 		
 		var df = new DecimalFormat("#.##");
-		df.setRoundingMode(RoundingMode.CEILING);
+		df.setRoundingMode(RoundingMode.HALF_UP);
 		
 		String totalText = df.format(totalPrice); 
 		totaltxt.setText("Total: £"+totalText);
