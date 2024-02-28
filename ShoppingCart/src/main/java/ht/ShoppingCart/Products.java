@@ -14,7 +14,7 @@ public class Products {
 		}
 		if (name.equals("other1")) {
 			this.name = "other1";
-			this.price = 10.00;
+			this.price = 10.00; 
 		}
 	}
 	
