@@ -242,7 +242,7 @@ public class ShoppingCart extends Application{
 		
 		
 		var df2 = new DecimalFormat("#.##");
-		df2.setRoundingMode(RoundingMode.CEILING);
+		df2.setRoundingMode(RoundingMode.HALF_UP);
 		double toDisplayTax = tax * (totalPrice/100);
 		taxtxt.setText("Tax (12.5%): £" + df2.format(toDisplayTax));
 		
