@@ -244,27 +244,12 @@ public class ShoppingCart extends Application{
 		
 		
 		//checkDiscount(productListItem, totalForDiscount, quantityNum);
-		//check50Discount(productListItem, totalForDiscount, quantityNum);
-		checkOver500();
+		check50Discount(productListItem, totalForDiscount, quantityNum);
+		
 	}
 	
 	
-	private void checkOver500() {
-		//totalPrice = totalPrice + (tax * (totalPrice/100)); 
-		subTotal = totalPrice;
-		
-		
-		
-		if (totalPrice >= 500) {
-				
-			toDisplayTotalSaved = totalPrice * 0.2;		
-			totalPrice = totalPrice - (totalPrice * 0.2);
-			
-		}
-		totalTax =  (totalPrice * 0.125); 
-		totalPrice = totalPrice + totalTax;
 
-	}
 	
 	private void check50Discount(int productListItem, double totalForDiscount, int quantityNum) {
 		
