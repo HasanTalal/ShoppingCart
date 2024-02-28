@@ -1,5 +1,7 @@
 package ht.ShoppingCart;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -192,7 +194,11 @@ public class ShoppingCart extends Application{
 			text=text+"____________\n Name: "+c.name+"\n price: "+c.price+"\n";
 			receipt.setText(text);
 		}	
-		String totalText = totalPrice + ""; 
+		
+		var df = new DecimalFormat("#.##");
+		df.setRoundingMode(RoundingMode.CEILING);
+		
+		String totalText = df.format(totalPrice); 
 		totaltxt.setText("Total: £"+totalText);
 		int listlen = productsList.size();
 		testlbl.setText(listlen+"");
