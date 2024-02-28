@@ -69,12 +69,12 @@ public class ShoppingCart extends Application{
 		testlbl = new Label("test");
 		testlbl.setLayoutX(0);
 		testlbl.setLayoutY(0);
-		ui.getChildren().add(testlbl);
+		//ui.getChildren().add(testlbl);
 		
 		testbtn = new Button();
 		testbtn.setLayoutX(40);
 		testbtn.setLayoutY(0);
-		ui.getChildren().add(testbtn);
+		//ui.getChildren().add(testbtn);
 		testbtn.setOnAction(e -> testMethod());
 		
 		ObservableList<String> options = FXCollections.observableArrayList(
