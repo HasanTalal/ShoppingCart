@@ -244,8 +244,9 @@ public class ShoppingCart extends Application{
 		
 		double totalForDiscount = totalPrice;
 		
-		totalPrice =  totalPrice + (tax * (totalPrice/100));
-		subTotal = totalPrice;
+//		totalPrice =  totalPrice + (tax * (totalPrice/100));
+//		subTotal = totalPrice;
+		
 		
 		
 		checkDiscount(productListItem, totalForDiscount, quantityNum);
@@ -256,10 +257,14 @@ public class ShoppingCart extends Application{
 	
 	private void checkDiscount(int productListItem, double totalForDiscount, int quantityNum) {
 		
+		totalPrice =  totalPrice + (tax * (totalPrice/100));
+		subTotal = totalPrice;
+		int freeProducts = productListItem / 3;	
+		
 		if (productListItem >= 3 && lastAddedName.equalsIgnoreCase("dove")) {
 			
 	
-			int freeProducts = productListItem / 3;	
+			
 			int selectedQuantityNum = quantityNum / 3;
 			totalPrice = totalPrice - (freeProducts * (lastAddedPriceForDiscount + (lastAddedPriceForDiscount * (tax/100))));
 			
@@ -279,10 +284,14 @@ public class ShoppingCart extends Application{
 				totalPrice = totalPrice - decuctionList.get(i);
 			}
 			
-			totalTax = totalForDiscount * (tax/100);
+			double currentTax = totalForDiscount * (tax/100);
+			totalTax = currentTax - (freeProducts * (lastAddedPriceForDiscount * (tax/100)));
+			
+			//totalTax = totalForDiscount * (tax/100);
 				
-		}			
+		}		
 	}
+		
 	
 	
 	private void printReceipt() {
