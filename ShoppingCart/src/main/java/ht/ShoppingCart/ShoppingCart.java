@@ -275,15 +275,14 @@ public class ShoppingCart extends Application{
 		if (productListItem >=2 && lastAddedName.equalsIgnoreCase("dove")) {
 			
 			
-			int freeProducts = productListItem / 2; //if list size is 6 FP = 3
-			//int selectedQuantityNum = quantityNum / 2;
+			int freeProducts = productListItem / 2; 
 		
 			
 			totalPrice = totalPrice - (freeProducts * (lastAddedPriceForDiscount / 2));
 			
 			
 			toDisplayTotalSaved = freeProducts * (lastAddedPriceForDiscount / 2);
-			//double totalDedecuted = freeProducts * (lastAddedPriceForDiscount / 2);
+			
 			decuctionList.add(toDisplayTotalSaved);
 			System.out.println(decuctionList);
 			
@@ -297,14 +296,14 @@ public class ShoppingCart extends Application{
 			for (int i = 0; i < decuctionList.size(); i++) {
 				totalPrice = totalPrice - decuctionList.get(i);
 			}	
-			//totalTax = totalForDiscount * (tax/100);	
+			
 			totalTax = totalTax + (quantityNum * (lastAddedPriceForDiscount * (tax/100)));
-			System.out.println("hello");
+			
 			
 		}	
 		
 		
-		//totalPrice =  totalPrice + totalTax;
+		
 		totalPrice = totalPrice + (tax * (totalPrice/100)); 
 		
 	}
