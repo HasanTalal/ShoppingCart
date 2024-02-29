@@ -251,7 +251,7 @@ public class ShoppingCart extends Application{
 	
 	private void checkOver500() {
 
-		subTotal = totalPrice;
+		subTotal = totalPrice + (totalPrice * 0.125);
 		
 		
 		if (totalPrice >= 500) {
@@ -359,7 +359,7 @@ public class ShoppingCart extends Application{
 	private void printTotal() {
 		
 		var df = new DecimalFormat("#.##");
-		df.setRoundingMode(RoundingMode.CEILING);
+		df.setRoundingMode(RoundingMode.HALF_UP);
 		
 		
 		totaltxt.setText("Total: £"+ df.format(totalPrice));
