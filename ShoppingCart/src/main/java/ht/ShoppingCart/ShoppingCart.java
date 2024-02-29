@@ -259,17 +259,19 @@ public class ShoppingCart extends Application{
 		
 		totalPrice =  totalPrice + (tax * (totalPrice/100));
 		subTotal = totalPrice;
+		
 		int freeProducts = productListItem / 3;	
 		
 		if (productListItem >= 3 && lastAddedName.equalsIgnoreCase("dove")) {
 			
-	
 			
-			int selectedQuantityNum = quantityNum / 3;
 			totalPrice = totalPrice - (freeProducts * (lastAddedPriceForDiscount + (lastAddedPriceForDiscount * (tax/100))));
 			
 			
+			int selectedQuantityNum = quantityNum / 3;
 			toDisplayTotalSaved = freeProducts * lastAddedPriceForDiscount;
+			
+			
 			double totalDedecuted = selectedQuantityNum * (lastAddedPriceForDiscount + (toDisplayTotalSaved *(tax/100)));
 			decuctionList.add(totalDedecuted);
 			
