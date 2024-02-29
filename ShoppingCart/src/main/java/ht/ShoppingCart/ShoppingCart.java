@@ -251,7 +251,7 @@ public class ShoppingCart extends Application{
 	
 	private void checkOver500() {
 		
-		subTotal = totalPrice;
+		subTotal = totalPrice + (totalPrice * 0.125);
 		
 		
 		if (totalPrice >= 500) {	
