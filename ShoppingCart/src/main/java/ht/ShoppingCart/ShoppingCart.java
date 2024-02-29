@@ -21,18 +21,12 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-//Class definition
-/*
- * this class represents a shopping cart features from a bigger overall application
- * it allows the user to add item to the cart and automatically applies discounts based on price or number of items
- */
 public class ShoppingCart extends Application{
 
 	FlowPane root = new FlowPane();
-	Scene scene = new Scene(root, 800, 600);// Scene for the application
-	Pane sidebar, ui =  new Pane(); // Panes for sidebar and UI elements
+	Scene scene = new Scene(root, 800, 600);
+	Pane sidebar, ui =  new Pane();
 	
-	// UI elements
 	TextArea receipt;
 	TextField totaltxt, taxtxt, discounttxt, subtotaltxt;
 	
@@ -40,10 +34,7 @@ public class ShoppingCart extends Application{
 	TextField quantity; 
 	ComboBox<String> productCombo;
 	Label pcLabel, discountlbl, testlbl, discountInfolbl;
-	
-	// Lists for products
 	ArrayList<Products> productsList = new ArrayList<Products>();
-	// Lists for  deductions when user qualifies for discounts
 	List<Double> decuctionList = new ArrayList<>();
 	
 	
@@ -54,7 +45,7 @@ public class ShoppingCart extends Application{
 	String lastAddedName;
 
 	
-	// Start method, where UI is initialised
+	
 	public static void main(String[] args) {
 		launch(args);
 
@@ -65,20 +56,17 @@ public class ShoppingCart extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		// Sidebar initialisation to house the adding product elements
 		sidebar = new Pane();
 		sidebar.setPrefSize(200, 6000);
 		sidebar.setStyle("-fx-background-color: #ffffc8");
 		
-		// main UI initialisation to house the showing product elements
 		ui = new Pane();
 		ui.setPrefSize(600, 800);
 		ui.setStyle("-fx-background-color: #fffff0");
 		
-		// adding elements to page
+		
 		root.getChildren().addAll(sidebar, ui); 
 		
-		//general label
 		pcLabel = new Label("Select your product below :)");
 		pcLabel.setLayoutX(20);
 		pcLabel.setLayoutY(20);
@@ -96,8 +84,6 @@ public class ShoppingCart extends Application{
 		//ui.getChildren().add(testbtn);
 		testbtn.setOnAction(e -> testMethod());
 		
-		
-		// Combo box for selecting products
 		ObservableList<String> options = FXCollections.observableArrayList(
 				"Dove",
 				"Axe Deo",
@@ -109,14 +95,12 @@ public class ShoppingCart extends Application{
 		productCombo.setLayoutY(80);
 		productCombo.setValue("Select a product");
 		
-		// Text field for quantity output
 		quantity = new TextField();
 		quantity.setLayoutX(20);
 		quantity.setLayoutY(110);
 		quantity.setPrefWidth(30);
 		quantity.setText("1");
 		
-		// Buttons for increasing and decreasing quantity
 		addq = new Button();
 		addq.setLayoutX(60);
 		addq.setLayoutY(110);
@@ -131,21 +115,17 @@ public class ShoppingCart extends Application{
 		minusq.setPrefWidth(30);
 		minusq.setText("-");
 		
-		 // Button for adding product to cart
 		purchaseBtn = new Button();
 		purchaseBtn.setLayoutX(20);
 		purchaseBtn.setLayoutY(140);
 		purchaseBtn.setText("Add to cart");
 		
-		// Adding UI elements to sidebar
 		sidebar.getChildren().addAll(productCombo, quantity, addq, minusq,purchaseBtn);
 		
-		// Event handlers for quantity buttons
 		addq.setOnAction(e -> changeQuantity("+"));
 		minusq.setOnAction(e -> changeQuantity("-"));
 		purchaseBtn.setOnAction(e -> purchase());
 		
-		// Initializing receipt text area and total text fields
 		receipt = new TextArea();
 		receipt.setLayoutX(10);
 		receipt.setLayoutY(80);
@@ -168,10 +148,8 @@ public class ShoppingCart extends Application{
 		taxtxt.setLayoutY(400);
 		taxtxt.setText("Tax (12.5%): £" );
 		
-		// Adding UI elements to UI pane
 		ui.getChildren().addAll(receipt, totaltxt, taxtxt, subtotaltxt);
 		
-		// Label and button for discount
 		discountlbl = new Label();
 		discountlbl.setLayoutX(20);
 		discountlbl.setLayoutY(180);
@@ -196,11 +174,11 @@ public class ShoppingCart extends Application{
 		discounttxt.setText("You saved: £"); 
 		ui.getChildren().add(discounttxt);
 		
-		//productCombo.getSelectionModel().selectedItemProperty().addListener(comboListner);
+		productCombo.getSelectionModel().selectedItemProperty().addListener(comboListner);
 		
 	}
 	
-	// Method for changing quantity
+	
 	private void changeQuantity(String operator) {
 		
 		int Qnum = Integer.parseInt(quantity.getText());
@@ -214,25 +192,24 @@ public class ShoppingCart extends Application{
 		}
 	}
 
-	// Listener for product combo box (not needed anymore)
-//	ChangeListener<String> comboListner = new ChangeListener<String>() {
-//		
-//		@Override
-//		public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-//
-//			
-//		}
-//	};
+	ChangeListener<String> comboListner = new ChangeListener<String>() {
+		
+		@Override
+		public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+			
+		}
+	};
 	
 	
-	// Method to add product to list
+	
 	public void addProductToList(String name, double price)
 	{
 		productsList.add(new Products(name, price));
 	}
 	
 	
-	//method that is called when the user adds a product(s) to the cart
+	
 	private void purchase() {	
 		String currentProduct = productCombo.getValue();
 		int quantityNum = Integer.parseInt(quantity.getText());
@@ -243,17 +220,17 @@ public class ShoppingCart extends Application{
 				addProductToList(products.getName(), products.getPrice()); 					
 		
 			}
-			calculateTotal();
+			calculateTotal();	
 			printReceipt();	
 		}				
 	}
 	
 	
 	
-	// Method for calculating total
+	
 	public void calculateTotal() {	
-		//int productListItem = productsList.size();
-		//int quantityNum = Integer.parseInt(quantity.getText());	
+		int productListItem = productsList.size();
+		int quantityNum = Integer.parseInt(quantity.getText());	
 			
 		
 		for(Products c: productsList) {	
@@ -263,37 +240,38 @@ public class ShoppingCart extends Application{
 			lastAddedName = c.getName();
 		}	
 		
-		//double totalForDiscount = totalPrice;
+		double totalForDiscount = totalPrice;
 		
 		
 		//checkDiscount(productListItem, totalForDiscount, quantityNum);
 		//check50Discount(productListItem, totalForDiscount, quantityNum);
-		
-		//Checks if the user is eligible for a discount
 		checkOver500();
 	}
 	
-	// Method for applying discount if total is over 500
+	
 	private void checkOver500() {
-
+		//totalPrice = totalPrice + (tax * (totalPrice/100)); 
 		subTotal = totalPrice;
 		
 		
+		
 		if (totalPrice >= 500) {
+				
 			toDisplayTotalSaved = totalPrice * 0.2;		
 			totalPrice = totalPrice - (totalPrice * 0.2);
+			
 		}
 		totalTax =  (totalPrice * 0.125); 
 		totalPrice = totalPrice + totalTax;
+
 	}
 	
-	// Method for checking discount for buying 2 or more products
 	private void check50Discount(int productListItem, double totalForDiscount, int quantityNum) {
 		
 		
 		subTotal = totalPrice + (tax * (totalPrice/100)); 
 		
-		// Apply discount for buying 2 or more products
+		
 		if (productListItem >=2 && lastAddedName.equalsIgnoreCase("dove")) {
 			
 			
@@ -331,7 +309,6 @@ public class ShoppingCart extends Application{
 		
 	}
 	
-	// Method for checking discount for buying 3 or more products
 	private void checkDiscount(int productListItem, double totalForDiscount, int quantityNum) {
 		
 		totalPrice =  totalPrice + (tax * (totalPrice/100));
@@ -366,7 +343,6 @@ public class ShoppingCart extends Application{
 	}
 	
 	
-	// Method for printing receipt
 	private void printReceipt() {
 		clearReceipt();
 		String text="";
@@ -379,7 +355,7 @@ public class ShoppingCart extends Application{
 	}
 	
 	
-	// Method for printing total
+	
 	private void printTotal() {
 		
 		var df = new DecimalFormat("#.##");
@@ -395,7 +371,7 @@ public class ShoppingCart extends Application{
 	
 	
 	
-	// Method for checking to check if product is selected and quantity is more than 0
+	
 	private boolean valid(String currentProduct, int quantityNum) {
 		 if (currentProduct.equals("Select a product")) {
 			 warningMsg("productNotSelected");
@@ -411,7 +387,7 @@ public class ShoppingCart extends Application{
 	}
 	
 	
-	// Method for displaying warning messages if not valid
+	
 	private void warningMsg(String warningType) {
 		Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.setHeaderText(null);
@@ -429,12 +405,11 @@ public class ShoppingCart extends Application{
 	}	
 	
 	
-	 // Method for testing
+	
 	private void testMethod() {
 		receipt.setText("");
 	}
-	
-	// Method for clearing receipt
+
 	private void clearReceipt() {
 		receipt.setText("");
 	}
